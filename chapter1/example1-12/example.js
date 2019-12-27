@@ -7,6 +7,9 @@ var HOUR_HAND_TRUNCATION = canvas.width / 10;
 var NUMERAL_SPACING = 20; // 表盘与刻度的距离
 var RADIUS = canvas.width / 2 - MARGIN; // 表盘的半径
 var HAND_RADIUS = RADIUS + NUMERAL_SPACING; // 刻度半径
+var snapshotButton = document.getElementById('snapshotButton'); // 按钮dom节点
+var snapshotImageElement = document.getElementById('snapshotImageElement');// img节点
+var loop;  // 时钟定时器
 
 context.font = FONT_HEIGHT + 'px Arial';
 
@@ -25,7 +28,7 @@ function drawNumberals() {
 
   numerals.forEach(function (numeral, index) {
     angle = Math.PI * 2 / 12 * (2 - index);
-    numeralWidth = context.measureText(numeral).width; // 度量文本的宽度
+    numeralWidth = context.measureText(numeral).width // 度量文本的宽度
     context.fillText(numeral, canvas.width / 2 + Math.cos(angle) * HAND_RADIUS - numeralWidth / 2, canvas.height / 2 - Math.sin(angle) * HAND_RADIUS + FONT_HEIGHT / 3);
   })
 }
@@ -67,4 +70,21 @@ function drawClock() {
   drawHands();
 }
 
-setInterval(drawClock, 1000);
+loop = setInterval(drawClock, 1000);
+
+snapshotButton.onclick = function () {
+  var dataUrl;
+  if (snapshotButton.value === 'Take snapshot') {
+    clearInterval(loop);
+    dataUrl = canvas.toDataURL(); // 获取数据地址
+    snapshotImageElement.src = dataUrl;
+    snapshotImageElement.style.display = 'inline';
+    canvas.style.display = 'none';
+    snapshotButton.value = 'Return to canvas'
+  } else {
+    loop = setInterval(drawClock, 1000);
+    snapshotImageElement.style.display = 'none';
+    canvas.style.display = 'inline';
+    snapshotButton.value = 'Take snapshot'
+  }
+}
