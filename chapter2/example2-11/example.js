@@ -6,23 +6,24 @@ function draw() {
 
   context.save();
 
-  context.shadowColor = 'rgba(200,200,0,0.5)';
-  context.shadowOffsetX = 12;
-  context.shadowOffsetY = 12;
-  context.shadowBlur = 15;
+  // 阴影样式
+  // context.shadowColor = 'rgba(200,200,0,0.5)';
+  // context.shadowOffsetX = 12;
+  // context.shadowOffsetY = 12;
+  // context.shadowBlur = 15;
 
   drawCutouts();
-  // strokeCutoutShapes();
+  strokeCutoutShapes();
 
   context.restore();
 }
 
 function drawCutouts() {
   context.beginPath();
-  addOuterRectanglePath(); //绘制一个外层的矩形
-  addCirclePath(); // 顺时针绘制矩形路径
-  addRectanglePath(); // 逆时针绘制矩形路径
-  addTrianglePath(); // 逆时针创建三角形路径
+  addOuterRectanglePath(); // 创建一个顺时针外层的矩形路径
+  addCirclePath(); // 创建逆时针绘制矩形路径
+  addRectanglePath(); // 创建逆时针绘制矩形路径
+  addTrianglePath(); // 创建逆时针创建三角形路径
   context.fill(); // 填充
 
 }
@@ -33,14 +34,15 @@ function strokeCutoutShapes() {
 
   context.strokeStyle = 'rgba(0,0,0,.7)';
 
-  context.beginPath();
-  addOuterRectanglePath();
-  context.stroke();
+  context.beginPath(); // 清除当前路径的子路径
+  addOuterRectanglePath();// 创建一个属于顺时针外层的矩形路径
+  context.stroke(); // 给外层矩形路径描边
 
-  context.beginPath();
-  addCirclePath();
-  addTrianglePath();
-  context.stroke();
+  context.beginPath(); // 清除当前路径的子路径
+  addCirclePath(); //创建一个逆时针的圆形路径
+  addRectanglePath(); // 创建一个逆时针矩形路径
+  addTrianglePath(); // 创建一个逆时针的三角形路径
+  context.stroke(); // 给圆形，矩形，三角形路径描边
 
   context.restore();
 }
@@ -69,7 +71,7 @@ function addOuterRectanglePath() {
   context.rect(110, 25, 370, 335);
 }
 
-// 顺时针绘制圆形路径
+// 逆时针绘制圆形路径
 function addCirclePath() {
   context.arc(300, 300, 40, 0, Math.PI * 2, true);
 }
@@ -79,7 +81,7 @@ function addRectanglePath() {
   rect(310, 55, 70, 35, true);
 }
 
-//绘制一个三角形
+// 逆时针绘制一个三角形
 function addTrianglePath() {
   context.moveTo(400, 200);
   context.lineTo(250, 115);
