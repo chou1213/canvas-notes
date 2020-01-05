@@ -7,6 +7,8 @@ var HOUR_HAND_TRUNCATION = canvas.width / 10;
 var NUMERAL_SPACING = 20; // 表盘与刻度的距离
 var RADIUS = canvas.width / 2 - MARGIN; // 表盘的半径
 var HAND_RADIUS = RADIUS + NUMERAL_SPACING; // 刻度半径
+var snapshotImageElement = document.getElementById('snapshotImageElement');// img节点
+
 
 context.font = FONT_HEIGHT + 'px Arial';
 
@@ -65,6 +67,12 @@ function drawClock() {
   drawNumberals();
   drawCenter();
   drawHands();
+  updateClockImage();
 }
 
 setInterval(drawClock, 1000);
+
+// 获取数据元地址赋值给Image，src属性
+function updateClockImage() {
+  snapshotImageElement.src = canvas.toDataURL();
+}
