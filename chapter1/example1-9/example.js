@@ -59,6 +59,7 @@ function rubberbandEnd() {
     // rubberbandRectangle.left - bbox.left 计算当前鼠标的位置相对于canvas的x坐标
     // rubberbandRectangle.top - bbox.top   计算当前鼠标的位置相对于canvas的y坐标
     context.drawImage(canvas, rubberbandRectangle.left - bbox.left, rubberbandRectangle.top - bbox.top, rubberbandRectangle.width, rubberbandRectangle.height, 0, 0, canvas.width, canvas.height);
+    // context.drawImage(canvas, rubberbandRectangle.left - bbox.left, rubberbandRectangle.top - bbox.top, rubberbandRectangle.width, rubberbandRectangle.height, 0, 0, rubberbandRectangle.width, rubberbandRectangle.height);
   } catch (e) {
     console.log(e);
   }

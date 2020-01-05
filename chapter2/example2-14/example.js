@@ -1,7 +1,7 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
-function drawGrid(context, color, stepx, stepy) {
+function drawGrid(contextm, color, stepx, stepy) {
   context.strokeStyle = color;
   context.lineWidth = 0.5;
   for (var i = stepx + 0.5; i < context.canvas.width; i += stepx) {
