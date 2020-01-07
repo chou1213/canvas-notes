@@ -5,7 +5,7 @@ var strokeStyleSelect = document.getElementById('strokeStyleSelect'); // 下拉�
 var guidewireCheckbox = document.getElementById('guidewireCheckbox'); // 是否需要辅助线的复选框
 var drawingSurfaceImageData;
 var mousedown = {}; // 保存鼠标点击的坐标 
-var rubberbandRect = {}; // 保存由对角线形成的矩形框
+var rubberbandRect = {}; // 保存由圆形成的矩形框
 var dragging = false; // 标识鼠标点击的状态
 var guidewires = guidewireCheckbox.checked; // 是否需要辅助线
 
@@ -86,15 +86,29 @@ function updateRubberbandRectangle(loc) {
   context.restore();
 }
 
-// 绘制对角线，传入当前坐标
+// 绘制圆，传入当前坐标
 function drawRubberbandShape(loc) {
+  var angle;
+  var radius;
+  if (mousedown.y === loc.y) {
+    radius = Math.abs(loc.x - mousedown.x);
+  } else {
+    angle = Math.atan(rubberbandRect.height / rubberbandRect.width);
+    radius = rubberbandRect.height / Math.sin(angle);
+    console.log(radius);
+    console.log(Math.sqrt(Math.pow(rubberbandRect.height, 2) + Math.pow(rubberbandRect.width, 2)));
+    // 勾股定理
+    // radius = Math.sqrt(Math.pow(rubberbandRect.height, 2) + Math.pow(rubberbandRect.width, 2)); 
+  }
+
+
+
   context.beginPath();
-  context.moveTo(mousedown.x, mousedown.y);
-  context.lineTo(loc.x, loc.y);
+  context.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2, false);
   context.stroke();
 }
 
-// 聚合绘制对角线方法，绘制矩形的方法
+// 聚合绘制圆方法，绘制矩形的方法
 function updateRubberband(loc) {
   updateRubberbandRectangle(loc);
   drawRubberbandShape(loc);
@@ -145,9 +159,9 @@ canvas.onmousemove = function (e) {
   if (dragging) {
     e.preventDefault();
     loc = windowToCanvas(e.clientX, e.clientY);
-    // 拖动鼠标绘制对角线，矩形框，辅助线前，用空白的图片像素恢复画布
+    // 拖动鼠标绘制圆，矩形框，辅助线前，用空白的图片像素恢复画布
     restoreDrawingSurface();
-    // 绘制对角线，矩形框
+    // 绘制圆，矩形框
     updateRubberband(loc);
     // 判断是否需要辅助线
     if (guidewires) {
@@ -160,9 +174,9 @@ canvas.onmousemove = function (e) {
 // 鼠标离开屏幕的处理程序
 canvas.onmouseup = function (e) {
   var loc = windowToCanvas(e.clientX, e.clientY);
-  // 拖动鼠标绘制对角线，矩形框前，用空白的图片像素恢复画布
+  // 拖动鼠标绘制圆，矩形框前，用空白的图片像素恢复画布
   restoreDrawingSurface();
-  // 绘制对角线，矩形框
+  // 绘制圆，矩形框
   updateRubberband(loc);
   dragging = false; // 记录拖拽的状态
 }
@@ -186,5 +200,4 @@ guidewireCheckbox.onchange = function () {
 
 context.strokeStyle = strokeStyleSelect.value;
 
-drawGrid(context, 'lightgray', 10, 10);
 drawGrid(context, 'lightgray', 10, 10);
