@@ -1,6 +1,7 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
+// 绘制圆角矩形
 function roundedRect(cornerX, cornerY, width, height, cornerRadius) {
   if (width > 0) {
     context.moveTo(cornerX + cornerRadius, cornerY);
@@ -12,7 +13,14 @@ function roundedRect(cornerX, cornerY, width, height, cornerRadius) {
 
 }
 
-function drawRoundedRect() { }
+function drawRoundedRect(strokeStyle, fillStyle, cornerX, cornerY, width, height, cornerRadius) {
+  context.beginPath();
+  roundedRect(cornerX, cornerY, width, height, cornerRadius);
+  context.strokeStyle = strokeStyle;
+  context.fillStyle = fillStyle;
+  context.stroke();
+  context.fill();
+}
 
 drawRoundedRect('blue', 'yellow', 50, 40, 100, 100, 10);
 drawRoundedRect('purple', 'green', 50, 40, 100, 100, 10);
