@@ -18,12 +18,10 @@ for (var i = 0; i < lineArr.length; i++) {
   context.restore();
 }
 
-
-
 context.beginPath();
 context.save();
 context.lineJoin = 'miter';
-context.miterLimit = 1000;
+context.miterLimit = 1; // 值太小就会用bevel模式了
 context.moveTo(300, 100);
 context.lineTo(400, 100);
 context.lineTo(400, 200);
