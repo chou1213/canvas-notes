@@ -11,6 +11,7 @@ var points = [
   { x: canvas.width - ARROW_MARGIN, y: ARROW_MARGIN * 2 }
 ];
 
+// 绘制点
 function drawPoint(x, y, strokeStyle, fillStyle) {
   context.beginPath();
   context.fillStyle = fillStyle;
@@ -21,6 +22,7 @@ function drawPoint(x, y, strokeStyle, fillStyle) {
   context.stroke();
 }
 
+// 根据数组绘制点
 function drawBezierPoints() {
   var strokeStyle;
   var fillStyle;
@@ -35,7 +37,15 @@ function drawArrow() {
   context.strokeStyle = 'white';
   context.fillStyle = 'cornflowerblue';
 
+  // 绘制线段
   context.moveTo(canvas.width - ARROW_MARGIN, ARROW_MARGIN * 2);
+  context.lineTo(canvas.width - ARROW_MARGIN, canvas.height - ARROW_MARGIN * 2);
+
+  context.quadraticCurveTo(points[0].x, points[0].y, points[1].x, points[1].y);
+  context.lineTo(ARROW_MARGIN, canvas.height / 2 + ARROW_MARGIN);
+  context.quadraticCurveTo(points[2].x, points[2].y, points[3].x, points[3].y);
+  context.lineTo(canvas.width - ARROW_MARGIN * 2, ARROW_MARGIN);
+  context.quadraticCurveTo(points[4].x, points[4].y, points[5].x, points[5].y);
 
   context.fill();
   context.stroke();
