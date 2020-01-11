@@ -187,4 +187,3 @@ guidewireCheckbox.onchange = function () {
 context.strokeStyle = strokeStyleSelect.value;
 
 drawGrid(context, 'lightgray', 10, 10);
-drawGrid(context, 'lightgray', 10, 10);
