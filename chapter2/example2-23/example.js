@@ -37,7 +37,7 @@ function drawArrow() {
   context.strokeStyle = 'white';
   context.fillStyle = 'cornflowerblue';
 
-  // 绘制线段
+  // 绘制3端圆弧，3条线段
   context.moveTo(canvas.width - ARROW_MARGIN, ARROW_MARGIN * 2);
   context.lineTo(canvas.width - ARROW_MARGIN, canvas.height - ARROW_MARGIN * 2);
 
