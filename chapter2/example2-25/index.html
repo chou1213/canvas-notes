@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: #ddd;
+    }
+
+    #canvas {
+      /* width: 300px;
+      height: 200px; */
+      margin-left: 10px;
+      margin-top: 10px;
+      box-shadow: 4px 4px 8px rgbba(0, 0, 0, 0.5);
+      cursor: pointer;
+      background-color: #fff;
+    }
+
+    #controls {
+      position: absolute;
+      left: 25px;
+      top: 25px;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id='canvas' width='600' height="400">
+    not supported
+  </canvas>
+  <div id="controls">
+    sidesSelect: <select name="" id="sidesSelect">
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7" selected>7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+    fillCheckbox:
+    <input id='fillCheckbox' type='checkbox' checked />
+    startAngleSelect:
+    <input id="startAngleSelect" type='text' value='10'>
+    <input id="eraseAllButton" type='button' value='erase all'>
+  </div>
+  <script src="./example.js"></script>
+</body>
+
+</html>
