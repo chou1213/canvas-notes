@@ -11,6 +11,7 @@ var guidewires = guidewireCheckbox.checked; // 是否需要辅助线
 
 // 绘制网格线
 function drawGrid(context, color, stepx, stepy) {
+  context.save()
   context.strokeStyle = color;
   // 为什么+0.5，边界原理
   for (var i = stepx + 0.5; i < context.canvas.width; i += stepx) {
@@ -26,6 +27,7 @@ function drawGrid(context, color, stepx, stepy) {
     context.lineTo(context.canvas.width, i)
     context.stroke();
   }
+  context.restore();
 }
 
 // window坐标转换成canvas坐标
@@ -78,12 +80,13 @@ function updateRubberbandRectangle(loc) {
     rubberbandRect.top = loc.y;
   }
 
-  context.beginPath();
-  context.rect(rubberbandRect.left, rubberbandRect.top, rubberbandRect.width, rubberbandRect.height);
-  context.save();
-  context.strokeStyle = 'red';
-  context.stroke();
-  context.restore();
+  // context.beginPath();
+  // context.rect(rubberbandRect.left, rubberbandRect.top, rubberbandRect.width, rubberbandRect.height);
+  // context.save();
+  // context.strokeStyle = 'red';
+  // context.lineWidth = 0.5;
+  // context.stroke();
+  // context.restore();
 }
 
 // 绘制对角线，传入当前坐标
