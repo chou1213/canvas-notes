@@ -1,18 +1,18 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
-var strokeStyleSelect = document.getElementById('strokeStyleSelect');
-var fillStyleSelect = document.getElementById('fillStyleSelect');
-var sidesSelect = document.getElementById('sidesSelect');
-var startAngleSelect = document.getElementById('startAngleSelect');
-var fillCheckbox = document.getElementById('fillCheckbox');
-var eraseAllButton = document.getElementById('eraseAllButton');
+var strokeStyleSelect = document.getElementById('strokeStyleSelect'); // 选择边框的颜色
+var fillStyleSelect = document.getElementById('fillStyleSelect'); // 选择填充的颜色
+var sidesSelect = document.getElementById('sidesSelect'); // 选择边的数量
+var startAngleSelect = document.getElementById('startAngleSelect'); // 选择初始角度
+var fillCheckbox = document.getElementById('fillCheckbox'); // 是否填充路径的复选框
+var eraseAllButton = document.getElementById('eraseAllButton'); // 清空画布的按钮
 var guidewireCheckbox = document.getElementById('guidewireCheckbox'); // 是否需要辅助线的复选框
-var mousedown = {};
-var rubberbandRect = {};
-var drawingSurfaceImageData;
+var mousedown = {}; // 记录点击的坐标
+var rubberbandRect = {}; // 保存由对角线形成的矩形框
+var drawingSurfaceImageData; // 记录空白画布的图像像素
 var dragging = false; // 标识鼠标点击的状态
 var guidewires = guidewireCheckbox.checked; // 是否需要辅助线
-var Point = function (x, y) {
+var Point = function (x, y) { // 记录多边形每个点
   this.x = x;
   this.y = y;
 }
@@ -47,10 +47,10 @@ function drawGrid(context, color, stepx, stepy) {
   context.restore();
 }
 
+// 获取canvas图像像素，放回imageData对象
 function saveDrawingSurface() {
   drawingSurfaceImageData = context.getImageData(0, 0, canvas.width, canvas.height);
 }
-
 
 // 把图像像素绘制到画布
 function restoreDrawingSurface() {
@@ -122,17 +122,33 @@ function updateRubberbandRectangle(loc) {
   // context.restore();
 }
 
+/**
+ * 导出多边形的坐标
+ * @param {Number} centerX  多边形中心点x坐标
+ * @param {Number} centerY  多边形中心点y坐标
+ * @param {Number} radius   半径
+ * @param {Number} sides    变数
+ * @param {Number} startAngle 初始角度
+ */
 function getPolygonPoints(centerX, centerY, radius, sides, startAngle) {
   var points = [];
   var angle = startAngle || 0;
   for (var i = 0; i < sides; i++) {
-    // console.log(centerX + radius * Math.cos(angle), centerY - radius * Math.sin(angle));
+    // console.log(1, centerX + radius * Math.cos(angle), centerY - radius * Math.sin(angle));
     points.push(new Point(centerX + radius * Math.cos(angle), centerY - radius * Math.sin(angle)));
     angle += 2 * Math.PI / sides;
   }
   return points;
 }
 
+/**
+ * 创建多边形的路径
+ * @param {Number} centerX  多边形中心点x坐标
+ * @param {Number} centerY  多边形中心点y坐标
+ * @param {Number} radius   半径
+ * @param {Number} sides    变数
+ * @param {Number} startAngle 初始角度
+ */
 function createPolgonPath(centerX, centerY, radius, sides, startAngle) {
   var points = getPolygonPoints(centerX, centerY, radius, sides, startAngle);
   context.beginPath();
@@ -143,15 +159,18 @@ function createPolgonPath(centerX, centerY, radius, sides, startAngle) {
   context.closePath();
 }
 
+// 给多边形路径描边和填充
 function drawRubberbandShape() {
-  createPolgonPath(mousedown.x, mousedown.y, rubberbandRect.width / 2, parseInt(sidesSelect.value), (Math.PI / 180) * parseInt(startAngleSelect.value));
+  // 中心点，用鼠标的起始点，半径用橡皮筋矩形的宽度，初始角度需要角度转弧度
+  createPolgonPath(mousedown.x, mousedown.y, rubberbandRect.width, parseInt(sidesSelect.value), (Math.PI / 180) * parseInt(startAngleSelect.value));
+  // 判断是否需要填充
   if (fillCheckbox.checked) {
     context.fill();
   }
   context.stroke();
 }
 
-// 聚合绘制对角线方法，绘制矩形的方法
+// 聚合绘制对角线方法，绘制多边形的方法
 function updateRubberband(loc) {
   updateRubberbandRectangle(loc);
   drawRubberbandShape();
@@ -174,7 +193,7 @@ strokeStyleSelect.onchange = function (e) {
   context.strokeStyle = strokeStyleSelect.value;
 }
 
-// 监听复选框
+// 选择填充的颜色
 fillStyleSelect.onchange = function () {
   context.fillStyle = fillStyleSelect.value;
 }
@@ -191,6 +210,7 @@ canvas.onmousedown = function (e) {
   dragging = true;
 }
 
+// 移动处理程序
 canvas.onmousemove = function (e) {
   var loc;
   if (dragging) {
@@ -198,7 +218,7 @@ canvas.onmousemove = function (e) {
     loc = windowToCanvas(e.clientX, e.clientY);
     // 拖动鼠标绘制对角线，矩形框，辅助线前，用空白的图片像素恢复画布
     restoreDrawingSurface();
-    // 绘制对角线，矩形框
+    // 绘制对角线，多边形
     updateRubberband(loc);
     // 判断是否需要辅助线
     if (guidewires) {
@@ -207,15 +227,17 @@ canvas.onmousemove = function (e) {
   }
 }
 
+// 弹起处理程序
 canvas.onmouseup = function (e) {
   var loc = windowToCanvas(e.clientX, e.clientY);
   // 拖动鼠标绘制对角线，矩形框前，用空白的图片像素恢复画布
   restoreDrawingSurface();
-  // 绘制对角线，矩形框
+  // 绘制对角线，多边形
   updateRubberband(loc);
   dragging = false; // 记录拖拽的状态
 }
 
+// 设置初始时边框的颜色，和填充的颜色
 context.strokeStyle = strokeStyleSelect.value;
 context.fillStyle = fillStyleSelect.value;
 
