@@ -64,7 +64,6 @@ Polygon.prototype = {
   },
   fill: function (context) {
     context.save();
-    this.createPath(context);
     context.fillStyle = this.fillStyle;
     context.fill();
     context.restore();
