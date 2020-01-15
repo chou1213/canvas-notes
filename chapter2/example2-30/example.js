@@ -86,7 +86,7 @@ function updateRubberbandRectangle(loc) {
 function drawBezierCurve() {
   context.beginPath();
   context.moveTo(endPoints[0].x, endPoints[0].y);
-  context.bezierCurveTo(controlPoints[0].x, controlPoints[0].y, controlPoints[1].x, controlPoints[1].y, endPoints[0].x, endPoints[0].y);
+  context.bezierCurveTo(controlPoints[0].x, controlPoints[0].y, controlPoints[1].x, controlPoints[1].y, endPoints[1].x, endPoints[1].y);
   context.stroke();
 }
 
@@ -146,6 +146,8 @@ function drawGuidewires(x, y) {
 function drawControlPoint(index) {
   context.beginPath();
   context.arc(controlPoints[index].x, controlPoints[index].y, POINT_RADIUS, 0, Math.PI * 2, false);
+  context.stroke();
+  context.fill();
 }
 
 // 绘制控制点
@@ -164,6 +166,8 @@ function drawControlPoints() {
 function drawEndPoint(index) {
   context.beginPath();
   context.arc(endPoints[index].x, endPoints[index].y, POINT_RADIUS, 0, Math.PI * 2, false);
+  context.stroke();
+  context.fill();
 }
 
 // 绘制结束点
