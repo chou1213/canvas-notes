@@ -87,6 +87,7 @@ function windowToCanvas(x, y) {
 function drawGrid(color, stepx, stepy) {
   context.save()
   context.strokeStyle = color;
+  context.lineWidth = 0.5;
   // 为什么+0.5，边界原理
   for (var i = stepx + 0.5; i < context.canvas.width; i += stepx) {
     context.beginPath();
@@ -232,15 +233,21 @@ function stopEditing() {
   editing = false;
 }
 
+// 点击处理程序
 canvas.onmousedown = function (e) {
   var loc = windowToCanvas(e.clientX, e.clientY);
   e.preventDefault();
   if (editing) {
+    // 遍历多边形数组
     polygons.forEach(function (polygon) {
       polygon.createPath(context);
+      // 判断当前鼠标的位置是否在路径中
       if (context.isPointInPath(loc.x, loc.y)) {
+        // 设置拖拽状态
         startDragging(loc);
+        // 记录被的多边形
         dragging = polygon;
+        // 记录鼠标位置与多边形位置的偏移量
         draggingOffsetX = loc.x - polygon.x;
         draggingOffsetY = loc.y - polygon.y;
         return;
@@ -251,13 +258,15 @@ canvas.onmousedown = function (e) {
     dragging = true;
   }
 }
-
+// 拖动鼠标的处理程序
 canvas.onmousemove = function (e) {
   var loc = windowToCanvas(e.clientX, e.clientY);
   e.preventDefault();
   if (editing && dragging) {
+    // 重置被拖拽多边形的坐标
     dragging.x = loc.x - draggingOffsetX;
     dragging.y = loc.y - draggingOffsetY;
+    // 清空画布，重绘网格和所有多边形
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawGrid('lightgray', 10, 10);
     drawPolygons();
@@ -273,6 +282,7 @@ canvas.onmousemove = function (e) {
   }
 }
 
+// 鼠标离开屏幕的处理程序
 canvas.onmouseup = function (e) {
   var loc = windowToCanvas(e.clientX, e.clientY);
   e.preventDefault();
