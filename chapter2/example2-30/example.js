@@ -18,9 +18,9 @@ var CONTROL_POINT_STROKE_STYLE = 'blue';
 var CONTROL_POINT_FILL_STYLE = 'rgba(255,255,0,0.5)';
 var END_POINT_STROKE_STYLE = 'navy';
 var END_POINT_FILL_STYLE = 'rgba(0,255,0,0.5)';
-var POINT_RADIUS = 5;
-var draggingPoint = null;
-var showInstructions = false;
+var POINT_RADIUS = 5; // 每个点的半径
+var draggingPoint = null; // 记录被选中的控制点或者结束点的坐标
+var showInstructions = true; // 是否显示弹窗
 
 // 绘制网格线
 function drawGrid(color, stepx, stepy) {
@@ -86,6 +86,7 @@ function updateRubberbandRectangle(loc) {
 function drawBezierCurve() {
   context.beginPath();
   context.moveTo(endPoints[0].x, endPoints[0].y);
+  console.log(controlPoints[0].x, controlPoints[0].y, controlPoints[1].x, controlPoints[1].y, endPoints[0].x, endPoints[0].y, endPoints[1].x, endPoints[1].y);
   context.bezierCurveTo(controlPoints[0].x, controlPoints[0].y, controlPoints[1].x, controlPoints[1].y, endPoints[1].x, endPoints[1].y);
   context.stroke();
 }
@@ -215,6 +216,7 @@ function cursorInControlPoint(loc) {
   return pt;
 }
 
+// 被鼠标选中的控制点坐标
 function updateDraggingPoint(loc) {
   draggingPoint.x = loc.x;
   draggingPoint.y = loc.y;
@@ -224,16 +226,20 @@ canvas.onmousedown = function (e) {
   var loc = windowToCavnas(e.clientX, e.clientY);
   e.preventDefault();
 
+  // 非编辑状态，则是拖拽出贝塞尔曲线时，执行以下
   if (!editing) {
     saveDrawingSurface();
     mousedown.x = loc.x;
     mousedown.y = loc.y;
+    // 绘制橡皮筋矩形
     updateRubberbandRectangle(loc);
     dragging = true;
   } else {
+    // 编辑状态时，判断当前鼠标点是否在控制点路径中，或者是结束点的路径中
+    // NOTE draggingPoint是控制点或是结束点的引用，所以修改draggingPoint的坐标，同时修改控制点或结束点的值。
     draggingPoint = cursorInControlPoint(loc);
     if (!draggingPoint) {
-      draggingPoint = cursorInEndPoint(loc)
+      draggingPoint = cursorInEndPoint(loc);
     }
   }
 }
@@ -248,10 +254,15 @@ canvas.onmousemove = function (e) {
     }
   }
 
+  // 拖拽创建贝塞尔曲线时
   if (dragging) {
+    //绘制橡皮筋矩形，以及绘制贝塞尔曲线
     updateRubberband(loc);
+    // 绘制控制点和结束点
     drawControlAndEndPoints();
   } else if (draggingPoint) {
+    console.log(controlPoints);
+    // 拖拽控制点或者结束点时
     updateDraggingPoint(loc);
     drawControlAndEndPoints();
     drawBezierCurve();
@@ -262,23 +273,29 @@ canvas.onmouseup = function (e) {
   var loc = windowToCavnas(e.clientX, e.clientY);
   e.preventDefault();
   restoreDrawingSurface();
-  console.log(endPoints, controlPoints);
   if (!editing) {
+    //绘制橡皮筋矩形，以及绘制贝塞尔曲线
     updateRubberband(loc);
+    // 绘制控制点和结束点
     drawControlAndEndPoints();
+    // 取消拖拽状态
     dragging = false;
+    // 开启编辑状态
     editing = true;
+    // 判断是否显示编辑提示弹窗
     if (showInstructions) {
       instructions.style.display = 'inline';
     }
   } else {
     if (draggingPoint) {
+      //拖拽控制结束点时
       drawControlAndEndPoints();
     } else {
+      // 编辑状态，但是结束拖拽结束控制点后，点击画布再弹起，则结束编辑状态
       editing = false;
-      drawBezierCurve();
-      draggingPoint = null;
     }
+    drawBezierCurve();
+    draggingPoint = null;
   }
 }
 
@@ -305,6 +322,7 @@ instructionsOkayButton.onclick = function () {
 
 instructionsNoMoreButton.onclick = function () {
   instructions.style.display = 'none';
+  // 取消提示编辑的弹窗
   showInstructions = false;
 }
 
