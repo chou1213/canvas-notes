@@ -29,6 +29,9 @@ function drawGrid(color, stepx, stepy) {
   context.save();
   context.lineWidth = 0.5;
   context.strokeStyle = color;
+  context.fillStyle = '#fff';
+  context.fillRect(0, 0, context.canvas.width, context.canvas.height);
+
   for (var i = stepx + 0.5; i < canvas.width; i += stepx) {
     context.beginPath();
     context.moveTo(i, 0);
@@ -44,7 +47,7 @@ function drawGrid(color, stepx, stepy) {
   }
   context.restore();
 }
-windowToCanvas
+
 function windowToCanvas(x, y) {
   var bbox = canvas.getBoundingClientRect();
   return {
@@ -220,6 +223,7 @@ function eraseLast() {
   drawGrid(GRID_LINE_COLOR,
     GRID_HORIZONTAL_SPACING,
     GRID_VERTICAL_SPACING);
+  context.stroke()
 
   context.restore();
 }
