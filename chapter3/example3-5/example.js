@@ -1,6 +1,7 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 
+// 绘制网格
 function drawGrid(color, stepx, stepy) {
   context.save()
 
@@ -26,8 +27,15 @@ function drawGrid(color, stepx, stepy) {
   context.restore();
 };
 
-
 drawGrid('lightgray', 10, 10);
+
+
+// 绘制中心点
+context.save();
+context.beginPath();
+context.fillStyle = 'origin';
+context.fillRect(canvas.width / 2 - 10, canvas.height / 2 - 10, 20, 20);
+context.restore();
 
 context.fillStyle = 'yellow';
 context.strokeStyle = 'red';
