@@ -11,18 +11,35 @@ function emboss() {
   var width;
   var index;
 
-  imagedata = canvas.getImageData(0, 0, canvas.width, canvas.height);
+  imagedata = context.getImageData(0, 0, canvas.width, canvas.height);
   data = imagedata.data;
   width = imagedata.width;
   length = data.length;
 
+  console.log(imagedata);
+
   for (var i = 0; i < length; i++) {
     if (i <= length - width * 4) {
+      // 如果是rgb值
+      if ((i + 1) % 4 !== 0) {
 
+        if ((i + 4) % (width * 4) === 0) {
+          data[i] = data[i - 4];
+          data[i + 1] = data[i - 3];
+          data[i + 2] = data[i - 2];
+          data[i + 3] = data[i - 1];
+          i += 4;
+        } else {
+          data[i] = 255 / 2 + 2 * data[i] - data[i + 4] - data[i + width * 4];
+        }
+      }
     } else {
-
+      if ((i + 1) % 4 === 0) {
+        data[i] = data[i - width * 4];
+      }
     }
   }
+  context.putImageData(imagedata, 0, 0);
 }
 
 // 绘制图片
