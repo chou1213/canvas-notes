@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      background-color: #ddd;
+    }
+
+    #canvas {
+      background: #fff;
+      border: thin solid darkgray;
+    }
+
+    #video {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <video src="./1.mp4" id="video"></video>
+  <canvas id="canvas" width="720" height="405"> </canvas>
+
+  <script src="./requestNextAnimationFrame.js"></script>
+  <script src="./example.js"></script>
+</body>
+
+</html>
