@@ -140,7 +140,7 @@ function animate() {
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawGrid('lightGray', 10, 10);
     drawClock();
-    window.requestAnimationFrame(animate);
+    window.requestNextAnimationFrame(animate);
 }
 
 // 设置线宽
@@ -159,6 +159,6 @@ context.stroke();
 
 // 以上样式用于表盘的圆和线
 
-window.requestAnimationFrame(animate);
+window.requestNextAnimationFrame(animate);
 
 drawGrid('lightGray', 10, 10);
